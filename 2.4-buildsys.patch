@@ -1,0 +1,27 @@
+--- origsrc/audacious-2.4.3/m4/buildsys.m4	2011-01-12 05:07:36.000000000 -0600
++++ src/audacious-2.4.3/m4/buildsys.m4	2011-02-03 00:44:02.318018700 -0600
+@@ -101,7 +101,23 @@ AC_DEFUN([BUILDSYS_SHARED_LIB], [
+ 			UNINSTALL_LIB='rm -f ${DESTDIR}${libdir}/$$i'
+ 			CLEAN_LIB=''
+ 			;;
+-		cygwin* | mingw*)
++		cygwin*)
++			AC_MSG_RESULT(Cygwin)
++			LIB_CPPFLAGS='-DPIC'
++			LIB_CFLAGS=''
++			LIB_LDFLAGS='-shared -Wl,--out-implib,$(SHARED_LIB:cyg%${LIB_SUFFIX}=lib%.dll.a)'
++			LIB_PREFIX='cyg'
++			LIB_SUFFIX='-${LIB_MAJOR}.dll'
++			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
++			PLUGIN_CPPFLAGS=''
++			PLUGIN_CFLAGS=''
++			PLUGIN_LDFLAGS='-shared'
++			PLUGIN_SUFFIX='.dll'
++			INSTALL_LIB='${MKDIR_P} ${DESTDIR}${bindir} && ${INSTALL} -m 755 $$i ${DESTDIR}${bindir}/$$i && ${INSTALL} -m 755 $(SHARED_LIB:cyg%${LIB_SUFFIX}=lib%.dll.a) ${DESTDIR}${libdir}/$(SHARED_LIB:cyg%${LIB_SUFFIX}=lib%.dll.a)'
++			UNINSTALL_LIB='rm -f ${DESTDIR}${bindir}/$$i ${DESTDIR}${libdir}/$(SHARED_LIB:cyg%${LIB_SUFFIX}=lib%.dll.a)'
++			CLEAN_LIB='$(SHARED_LIB:cyg%${LIB_SUFFIX}=lib%.dll.a)'
++			;;
++		mingw*)
+ 			AC_MSG_RESULT(Win32)
+ 			LIB_CPPFLAGS='-DPIC'
+ 			LIB_CFLAGS=''
